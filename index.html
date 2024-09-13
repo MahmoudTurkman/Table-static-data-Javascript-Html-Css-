@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table Example</title>
+    <link href="style.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <h2>Records Table</h2>
+
+    <input type="text" id="searchInput" placeholder="Search...">
+    <button onclick="searchRecord()">Search</button>
+
+    <table id="recordsTable">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h3>Add New Record</h3>
+    <input type="text" id="firstName" placeholder="First Name">
+    <input type="text" id="lastName" placeholder="Last Name">
+    <input type="email" id="email" placeholder="Email">
+    <button onclick="addRecord()">Add Record</button>
+
+    <script>
+        const records = [
+            { firstName: "Amar", lastName: "Zoughier", email: "test@test.com" },
+            { firstName: "Amar2", lastName: "Zoughier", email: "test2@test2.com" }
+        ];
+
+        // Function to render the table with the records
+        function renderTable() {
+            const tableBody = document.querySelector('#recordsTable tbody');
+            tableBody.innerHTML = ''; // Clear the existing rows
+
+            records.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.firstName}</td>
+                    <td>${record.lastName}</td>
+                    <td>${record.email}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to add a new record
+        function addRecord() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+
+            if (firstName && lastName && email) {
+                records.push({ firstName, lastName, email });
+                renderTable(); // Re-render the table
+                clearInputs(); // Clear input fields
+            } else {
+                alert('Please fill all fields.');
+            }
+        }
+
+        // Function to clear input fields after adding a record
+        function clearInputs() {
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('email').value = '';
+        }
+
+        // Function to search for a record
+        function searchRecord() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredRecords = records.filter(record => 
+                record.firstName.toLowerCase().includes(searchInput) ||
+                record.lastName.toLowerCase().includes(searchInput) ||
+                record.email.toLowerCase().includes(searchInput)
+            );
+
+            const tableBody = document.querySelector('#recordsTable tbody');
+            tableBody.innerHTML = ''; // Clear the existing rows
+
+            filteredRecords.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.firstName}</td>
+                    <td>${record.lastName}</td>
+                    <td>${record.email}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Initial render of the table
+        renderTable();
+    </script>
+
+</body>
+</html>
